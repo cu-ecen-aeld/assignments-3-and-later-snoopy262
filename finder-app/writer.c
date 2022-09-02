@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	
-	int written = write(fd, argv[2], sizeof(argv[2]));
+	int written = write(fd, argv[2], strlen(argv[2]));
 
 	if(written == -1)
 	{
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	syslog(LOG_ERR, "written %s of lenght %lu ", argv[2], strlen(argv[2]));
+	syslog(LOG_ERR, "Writing %s to %s", argv[2], argv[1]);
 
 	return 0;
 }

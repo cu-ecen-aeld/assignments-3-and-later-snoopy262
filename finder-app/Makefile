@@ -1,8 +1,7 @@
 CC = $(CROSS_COMPILE)gcc
 
-writer.o: writer.c
-
 writer: writer.o
+writer.o: writer.c
 
 clean:
 	rm writer *.o
