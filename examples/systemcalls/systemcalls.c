@@ -10,14 +10,8 @@
 bool do_system(const char *cmd)
 {
 
-/*
- *  Call the system() function with the command set in the cmd
- *   and return a boolean true if the system() call completed with success
- *   or false() if it returned a failure
-*/
-
 	if(system(cmd) == 0)
-    	{
+    {
 		return true;
 	}
 	else
@@ -55,19 +49,41 @@ bool do_exec(int count, ...)
     // and may be removed
     command[count] = command[count];
 
-/*
- * TODO:
- *   Execute a system command by calling fork, execv(),
- *   and wait instead of system (see LSP page 161).
- *   Use the command[0] as the full path to the command to execute
- *   (first argument to execv), and use the remaining arguments
- *   as second argument to the execv() command.
- *
-*/
+    bool result = false;
+
+    int status;
+    pid_t pid;
+
+    pid = fork();
+    if(pid == 0)
+    {
+        // This is executed in the child
+	    execv(command[0], command);
+
+        printf("===== DEBUG =======: %s, %s", command[0], *(command + sizeof(char*)));
+        
+        // this point is only reached if the execv fails
+        exit(-1);
+    }
+    else if( pid != -1)
+    {
+        // this is executed in the parent
+        int wait_pid = wait(&status);
+
+        if(wait_pid == pid)
+        {
+            // child has terminated
+            if(WIFEXITED(status) && WEXITSTATUS(status) == 0)
+            {
+                // child has termianted normally
+                result = true;
+            }
+        }
+    }
 
     va_end(args);
 
-    return true;
+    return result;
 }
 
 /**
