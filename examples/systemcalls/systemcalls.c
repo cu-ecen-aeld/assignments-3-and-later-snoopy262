@@ -9,7 +9,6 @@
 */
 bool do_system(const char *cmd)
 {
-
 	if(system(cmd) == 0)
     {
 		return true;
@@ -60,8 +59,6 @@ bool do_exec(int count, ...)
         // This is executed in the child
 	    execv(command[0], command);
 
-        printf("===== DEBUG =======: %s, %s", command[0], *(command + sizeof(char*)));
-        
         // this point is only reached if the execv fails
         exit(-1);
     }
@@ -115,7 +112,52 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *
 */
 
+    bool result = false;
+
+    int status;
+    pid_t pid;
+
+    int fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
+    if (fd < 0)
+    {
+        // File not properly opened
+        return false;
+    }
+
+    pid = fork();
+    if(pid == 0)
+    {
+        // This is executed in the child
+        if(dup2(fd, 1) == -1)
+        {
+            // duplication failed
+            exit(-1);
+        }
+        
+        close(fd);
+	    execv(command[0], command);
+
+        // this point is only reached if the execv fails
+        exit(-1);
+    }
+    else if( pid != -1)
+    {
+        // this is executed in the parent
+        int wait_pid = wait(&status);
+
+        if(wait_pid == pid)
+        {
+            // child has terminated
+            if(WIFEXITED(status) && WEXITSTATUS(status) == 0)
+            {
+                // child has termianted normally
+                result = true;
+            }
+        }
+    }
+
+
     va_end(args);
 
-    return true;
+    return result;
 }
