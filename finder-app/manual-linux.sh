@@ -24,6 +24,10 @@ else
 	echo "Using passed directory ${OUTDIR} for output"
 fi
 
+cd "$FINDER_APP_DIR"
+
+ls
+
 exit 1
 mkdir -p ${OUTDIR}
 
