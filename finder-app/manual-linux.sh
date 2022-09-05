@@ -9,19 +9,22 @@ OUTDIR=/tmp/aeld
 KERNEL_REPO=git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 KERNEL_VERSION=v5.1.10
 BUSYBOX_VERSION=1_33_1
-#FINDER_APP_DIR=$(realpath $(dirname $0))
-FINDER_APP_DIR=/home/stefan/linux_sysprog/assignment-1-snoopy262/finder-app
+FINDER_APP_DIR=$(realpath $(dirname $0))
+#FINDER_APP_DIR=/home/stefan/linux_sysprog/assignment-1-snoopy262/finder-app
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
 
 if [ $# -lt 1 ]
 then
+	echo "Using writer directory ${FINDER_APP_DIR}"
 	echo "Using default directory ${OUTDIR} for output"
 else
 	OUTDIR=$1
+	echo "Using writer directory ${FINDER_APP_DIR}"
 	echo "Using passed directory ${OUTDIR} for output"
 fi
 
+exit 1
 mkdir -p ${OUTDIR}
 
 cd "$OUTDIR"
