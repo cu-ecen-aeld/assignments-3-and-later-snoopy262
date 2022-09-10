@@ -50,10 +50,22 @@ do
 	./writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 done
 
+if [ -z $(which finder.sh) ]
+then
+	echo "finder application not in path"
+	exit 1
+fi
+
+if [ -z $(which writer) ]
+then
+	echo "writer application not in path"
+	exit 1
+fi
+
 OUTPUTSTRING=$(./finder.sh "$WRITEDIR" "$WRITESTR")
 
 set +e
-echo ${OUTPUTSTRING} | grep "${MATCHSTR}"
+echo ${OUTPUTSTRING} | grep "${MATCHSTR}" > /tmp/assignment-4-result.txt
 if [ $? -eq 0 ]; then
 	echo "success"
 	exit 0
