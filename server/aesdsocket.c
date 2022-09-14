@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     printf("OK.\n");
     
     printf("Opening file for saving data... ");
-    output_fd = open(file_path, O_CREAT | O_APPEND | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
+    output_fd = open(file_path, O_CREAT | O_APPEND | O_RDWR, 0666);
 
     if(output_fd == -1)
     {
